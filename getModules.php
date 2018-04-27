@@ -30,6 +30,7 @@ if ($result->num_rows > 0) {
     	$data[$count]['name'] =$row["name"];
         $data[$count]['icon']= $row['icon'];
         $data[$count]['route'] = $row['route'];
+        $data[$count]['minAccessLevel'] = $row['minAccessLevel'];
         $count = $count +1;
     }
 } else {
