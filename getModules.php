@@ -20,7 +20,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 
-$sql = "SELECT * FROM modules";
+$sql = "SELECT * FROM modules ORDER BY moduleID";
 $result = $conn->query($sql);
 $count = 0;
 if ($result->num_rows > 0) {
@@ -30,7 +30,7 @@ if ($result->num_rows > 0) {
     	$data[$count]['name'] =$row["name"];
         $data[$count]['icon']= $row['icon'];
         $data[$count]['route'] = $row['route'];
-        $data[$count]['minAccessLevel'] = $row['minAccessLevel'];
+        $data[$count]['minAccessLevel'] = $row['minAccessLevel']; 
         $count = $count +1;
     }
 } else {
