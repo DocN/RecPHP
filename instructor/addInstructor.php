@@ -36,10 +36,10 @@ $uid = gen_uuid();
 $sql = "INSERT INTO instructors (instructorID, firstname, lastname, photoURL, bio, creationTime)
 VALUES ('{$uid}', '{$firstname}', '{$lastname}', '{$photoURL}', '{$bio}', '{$creationTime}')";
 if ($conn->query($sql) === TRUE) {
-    $data['message'] = "Instructor created successfully";
+    $data['message'] = "Instructor Successfully Added";
     $data['valid'] = 1;
 } else {
-    $data['message'] = "Instructor creation failed";
+    $data['message'] = "Instructor Failed to Add Instructor";
     $data['valid'] = 0;
 }
 
