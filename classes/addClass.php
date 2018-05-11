@@ -27,6 +27,7 @@ if ($conn->connect_error) {
 $classID = gen_uuid();
 $className = $request->className;
 $instructorID = $request->instructorID;
+$categoryID = $request->categoryID;
 $classLocation = $request->classLocation;
 $reservedSlots = $request->reservedSlots;
 $availableSlots = $request->availableSlots;
@@ -42,8 +43,8 @@ $classImageURL = $request->classImageURL;
 
 $creationTime = time();
 
-$sql = "INSERT INTO classes (classID, className, instructorID, classLocation, reservedSlots, availableSlots, beginDate, endDate, beginHour, beginMin, endHour, endMin, dayOfWeek, classDescription, classImageURL)
-VALUES ('{$classID}', '{$className}', '{$instructorID}', '{$classLocation}', '{$reservedSlots}', '{$availableSlots}', '{$beginDate}', '{$endDate}', '{$beginHour}', '{$beginMin}', '{$endHour}', '{$endMin}', '{$dayOfWeek}', '{$classDescription}', '{$classImageURL}')";
+$sql = "INSERT INTO classes (classID, className, instructorID, categoryID, classLocation, reservedSlots, availableSlots, beginDate, endDate, beginHour, beginMin, endHour, endMin, dayOfWeek, classDescription, classImageURL)
+VALUES ('{$classID}', '{$className}', '{$instructorID}', '{$categoryID}', '{$classLocation}', '{$reservedSlots}', '{$availableSlots}', '{$beginDate}', '{$endDate}', '{$beginHour}', '{$beginMin}', '{$endHour}', '{$endMin}', '{$dayOfWeek}', '{$classDescription}', '{$classImageURL}')";
 if ($conn->query($sql) === TRUE) {
     $data['message'] = "Class Successfully Added";
     $data['valid'] = 1;
