@@ -25,31 +25,32 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 $classID = gen_uuid();
-$className = $request->className;
-$instructorID = $request->instructorID;
-$categoryID = $request->categoryID;
-$classLocation = $request->classLocation;
-$reservedSlots = $request->reservedSlots;
-$availableSlots = $request->availableSlots;
-$beginDate = $request->beginDate;
-$endDate = $request->endDate;
-$beginHour = $request->beginHour;
-$beginMin = $request->beginMin;
-$endHour = $request->endHour;
-$endMin = $request->endMin;
-$dayOfWeek = $request->dayOfWeek;
-$classDescription = $request->classDescription;
-$classImageURL = $request->classImageURL;
-
+$className = mysqli_real_escape_string($conn, $request->className);
+$instructorID = mysqli_real_escape_string($conn,$request->instructorID);
+$categoryID = mysqli_real_escape_string($conn, $request->categoryID);
+$classLocation = mysqli_real_escape_string($conn, $request->classLocation);
+$reservedSlots = mysqli_real_escape_string($conn, $request->reservedSlots);
+$availableSlots = mysqli_real_escape_string($conn, $request->availableSlots);
+$beginDate = mysqli_real_escape_string($conn, $request->beginDate);
+$endDate = mysqli_real_escape_string($conn, $request->endDate);
+$beginHour = mysqli_real_escape_string($conn, $request->beginHour);
+$beginMin = mysqli_real_escape_string($conn, $request->beginMin);
+$endHour = mysqli_real_escape_string($conn, $request->endHour);
+$endMin = mysqli_real_escape_string($conn, $request->endMin);
+$dayOfWeek = mysqli_real_escape_string($conn, $request->dayOfWeek);
+$classDescription = mysqli_real_escape_string($conn, $request->classDescription);
+$classImageURL = mysqli_real_escape_string($conn, $request->classImageURL);
+$openSlots = $availableSlots - $reservedSlots;
 $creationTime = time();
 
 $sql = "INSERT INTO classes (classID, className, instructorID, categoryID, classLocation, reservedSlots, availableSlots, beginDate, endDate, beginHour, beginMin, endHour, endMin, dayOfWeek, classDescription, classImageURL)
 VALUES ('{$classID}', '{$className}', '{$instructorID}', '{$categoryID}', '{$classLocation}', '{$reservedSlots}', '{$availableSlots}', '{$beginDate}', '{$endDate}', '{$beginHour}', '{$beginMin}', '{$endHour}', '{$endMin}', '{$dayOfWeek}', '{$classDescription}', '{$classImageURL}')";
 if ($conn->query($sql) === TRUE) {
     $data['message'] = "Class Successfully Added";
+    parse_weeks($beginDate, $endDate, $dayOfWeek);
     $data['valid'] = 1;
 } else {
-    $data['message'] = "Failed to add Class";
+    $data['message'] = $sql + $conn->error;
     $data['valid'] = 0;
 }
 
@@ -77,6 +78,23 @@ function gen_uuid() {
         // 48 bits for "node"
         mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff )
     );
+}
+
+function parse_weeks($start_date, $end_date, $weekday) {
+	$wd = date('N', $start_date); // 1-7
+	$start_date += abs($weekday - $wd) * 86400;
+	while ($start_date < $end_date) {
+		$uid = gen_uuid();
+		$sql = "INSERT INTO events (eventID, classID, eventDay, usedSlots, maxSlots, active)
+		VALUES ('{$uid}', '{$GLOBALS['classID']}', '{$start_date}', '0', '{$GLOBALS['openSlots']}', '1')";
+		if($GLOBALS['conn']->query($sql)) {
+
+		}
+		else {
+		}
+	    //echo gmdate("Y-m-d\TH:i:s\Z", $start_date).date("l", $start_date).  "<br>";
+	    $start_date +=  604800;
+	}
 }
 
 ?>

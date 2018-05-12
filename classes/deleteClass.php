@@ -6,7 +6,7 @@ error_reporting(0);
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
-if(!isset($request->categoryName)) {
+if(!isset($request->categoryID)) {
     die();
 }
 
@@ -24,27 +24,20 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
-$categoryName = $request->categoryName;
-$hexColor = $request->hexColor;
-$categoryID = gen_uuid();
+$userid = $request->categoryID;
 
-$sqlSelect = "SELECT * FROM adminusers WHERE username='{$username}'";
-$result = $conn->query($sqlSelect);
-if ($result->num_rows > 0) {
-    $data['message'] = "Account already exists";
-    $conn->close();
-    echo json_encode($data);
-    die();
-} else {
 
-}
+//$creationTime = time();
 
-$sql = "INSERT INTO classcategories (categoryID, categoryName, hexColor)
-VALUES ('{$categoryID}','{$categoryName}', '{$hexColor}')";
+//$uid = gen_uuid();
+//$resetpin = 1;
+$sql = "DELETE FROM classcategories WHERE categoryID='{$userid}'";
 if ($conn->query($sql) === TRUE) {
-    $data['message'] = "Category Successfully Created";
+    $data['message'] = "Class deleted successfully";
+    $data['valid'] = 1;
 } else {
-    $data['message'] = "Failed to create category";
+    $data['message'] = "Class deletion failed";
+    $data['valid'] = 0;
 }
 
 $conn->close();
@@ -72,4 +65,5 @@ function gen_uuid() {
         mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff )
     );
 }
+
 ?>
