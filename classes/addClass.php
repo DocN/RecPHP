@@ -48,6 +48,14 @@ VALUES ('{$classID}', '{$className}', '{$instructorID}', '{$categoryID}', '{$cla
 if ($conn->query($sql) === TRUE) {
     $data['message'] = "Class Successfully Added";
     parse_weeks($beginDate, $endDate, $dayOfWeek);
+    $count = 0;
+    while($count < $reservedSlots) {
+        $sqlReserve = "INSERT INTO emailreserved (classID, email, slotNumber)
+        VALUES ('{$classID}', '', '{$count}')";
+        $conn->query($sqlReserve);
+        $count = $count + 1;
+    }
+    
     $data['valid'] = 1;
 } else {
     $data['message'] = $sql + $conn->error;
