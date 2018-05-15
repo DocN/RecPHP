@@ -89,6 +89,7 @@ function gen_uuid() {
 }
 
 function parse_weeks($start_date, $end_date, $weekday) {
+    $start_date -= 25200;
 	$wd = date('N', $start_date); // 1-7
 	$start_date += abs($weekday - $wd) * 86400;
 	while ($start_date < $end_date) {
