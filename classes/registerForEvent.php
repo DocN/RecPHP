@@ -27,18 +27,42 @@ if ($conn->connect_error) {
 
 $UID = mysqli_real_escape_string($conn, $request->UID);
 $eventID = mysqli_real_escape_string($conn, $request->eventID);
+$deductCredits = mysqli_real_escape_string($conn, $request->deductCredits);
 
 
 $sqlSelect = "SELECT * FROM registeredevents WHERE UID='{$UID}' AND eventID='{$eventID}'";
 $result = $conn->query($sqlSelect);
 //terminate if the user already exists
 if ($result->num_rows > 0) {
-    $data['message'] = "*Email already exists";
+    $data['message'] = "*User has already been registered for this class, please enter a different email";
     $data['valid'] = 0;
     $conn->close();
     echo json_encode($data);
     die();
 } 
+//for credit deduction
+if($deductCredits == 1) {
+    $sqlSelect = "SELECT balance FROM externalusers WHERE UID='{$UID}'";
+    $result = $conn->query($sqlSelect);
+    if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            $currentBalance =$row["balance"];
+            break;
+        }
+    } 
+    if($currentBalance <= 0) {
+        $data['message'] = "*Not enough credits to register for class";
+        $data['valid'] = 0;
+        $conn->close();
+        echo json_encode($data);
+        die();
+    }
+    else {
+        $currentBalance = $currentBalance -1;
+        $updateSQL = "UPDATE externalusers SET balance='{$currentBalance}' WHERE UID='{$UID}'";
+        $result = $conn->query($updateSQL);
+    }
+}
 
 $sql = "INSERT INTO registeredevents (UID, eventID)
 VALUES ('{$UID}', '{$eventID}')";
