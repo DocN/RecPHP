@@ -6,9 +6,10 @@ error_reporting(0);
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
-if(!isset($request->classID)) {
+if(!isset($request->eventID)) {
     die();
 }
+
 
 //echo $request->encryptionKey;
 //$res_ar = array("foo"=> $_REQUEST['body']);
@@ -25,26 +26,34 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 
-$classID = $request->classID;
-$className = $request->className;
-$classLocation = $request->classLocation;
-$instructorID = $request->instructorID;
-$categoryID = $request->categoryID;
-$classImage = $request->classImage;
-$classBio = $request->classDescription;
+$eventID = $request->eventID;
 
-$sqlSelect = "UPDATE classes SET className='{$className}', classLocation='{$classLocation}', instructorID='{$instructorID}', categoryID='{$categoryID}', classImageURL='{$classImage}', classDescription='{$classBio}' WHERE classID='{$classID}'";
-if ($conn->query($sqlSelect)) {
-    $data['message'] = "Successfully Updated Class Details";
+//credit balance
+$sql = "UPDATE externalusers eu
+LEFT OUTER JOIN registeredevents re 
+    ON eu.UID = re.UID 
+SET eu.balance = eu.balance +1
+WHERE re.eventID='{$eventID}'";
+
+$result = $conn->query($sql);
+
+//delete registered events
+//$sql = "DELETE FROM registeredevents WHERE eventID='{$eventID}'";
+//$result = $conn->query($sql);
+
+//cancel event
+$sql = "UPDATE events SET active='0' WHERE eventID='{$eventID}'";
+
+if($conn->query($sql)) {
+    $data['message'] = "Class successfully cancelled, all users have been credited";
     $data['valid'] = 1;
-    $conn->close();
-    echo json_encode($data);
-    die();
-} else {
-
 }
-$data['valid'] = 0;
+else {
+    $data['message'] = "Failed to cancel class";
+    $data['valid'] = 0;
+}
 $conn->close();
+
 echo json_encode($data);
 
 ?>
