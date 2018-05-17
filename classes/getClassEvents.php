@@ -24,7 +24,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
-$classID = $request->classID;
+$classID = mysqli_real_escape_string($conn, $request->classID);
 
 $sql = "SELECT * FROM events WHERE classId='{$classID}';";
 $result = $conn->query($sql);

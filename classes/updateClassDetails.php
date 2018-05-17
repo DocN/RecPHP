@@ -25,13 +25,13 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 
-$classID = $request->classID;
-$className = $request->className;
-$classLocation = $request->classLocation;
-$instructorID = $request->instructorID;
-$categoryID = $request->categoryID;
-$classImage = $request->classImage;
-$classBio = $request->classDescription;
+$classID = mysqli_real_escape_string($conn, $request->classID);
+$className = mysqli_real_escape_string($conn, $request->className);
+$classLocation = mysqli_real_escape_string($conn, $request->classLocation);
+$instructorID = mysqli_real_escape_string($conn, $request->instructorID);
+$categoryID = mysqli_real_escape_string($conn, $request->categoryID);
+$classImage = mysqli_real_escape_string($conn, $request->classImage);
+$classBio = mysqli_real_escape_string($conn, $request->classDescription);
 
 $sqlSelect = "UPDATE classes SET className='{$className}', classLocation='{$classLocation}', instructorID='{$instructorID}', categoryID='{$categoryID}', classImageURL='{$classImage}', classDescription='{$classBio}' WHERE classID='{$classID}'";
 if ($conn->query($sqlSelect)) {

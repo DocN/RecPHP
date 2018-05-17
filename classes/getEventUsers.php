@@ -25,7 +25,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
-$eventID = $request->eventID;
+$eventID = mysqli_real_escape_string($conn, $request->eventID);
 
 $sql = "SELECT * FROM registeredevents LEFT OUTER JOIN externalusers ON registeredevents.UID = externalusers.UID WHERE registeredevents.eventID = '{$eventID}'";
 $result = $conn->query($sql);

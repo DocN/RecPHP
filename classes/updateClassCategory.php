@@ -24,9 +24,9 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
-$categoryID = $request->categoryID;
-$categoryName = $request->categoryName;
-$hexColor = $request->hexColor;
+$categoryID = mysqli_real_escape_string($conn, $request->categoryID);
+$categoryName = mysqli_real_escape_string($conn, $request->categoryName);
+$hexColor = mysqli_real_escape_string($conn, $request->hexColor);
 
 $sqlSelect = "UPDATE classcategories SET categoryName='{$categoryName}', hexColor='{$hexColor}' WHERE categoryID='{$categoryID}'";
 $result = $conn->query($sqlSelect);

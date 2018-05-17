@@ -25,9 +25,9 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 
-$classID = $request->classID;
-$email = $request->email;
-$slotNumber = $request->slotNumber;
+$classID = mysqli_real_escape_string($conn, $request->classID);
+$email = mysqli_real_escape_string($conn, $request->email);
+$slotNumber = mysqli_real_escape_string($conn, $request->slotNumber);
 
 $sqlSelect = "UPDATE emailreserved SET email='{$email}' WHERE classID='{$classID}' AND slotNumber='{$slotNumber}'";
 if ($conn->query($sqlSelect)) {

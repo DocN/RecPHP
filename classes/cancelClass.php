@@ -26,7 +26,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 
-$eventID = $request->eventID;
+$eventID = mysqli_real_escape_string($conn, $request->eventID);
 
 //credit balance
 $sql = "UPDATE externalusers eu
