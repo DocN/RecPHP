@@ -24,9 +24,9 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
-$email = $request->email;
-$userid = $request->userid;
-$newepin = $request->newepin;
+$email = mysqli_real_escape_string($conn, $request->email);
+$userid = mysqli_real_escape_string($conn, $request->userid);
+$newepin = mysqli_real_escape_string($conn, $request->newepin);
 
 $sqlSelect = "UPDATE externalusers SET epin='{$newepin}', resetPin='1' WHERE email='{$email}' AND UID='{$userid}'";
 $result = $conn->query($sqlSelect);

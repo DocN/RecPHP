@@ -20,7 +20,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 
-$UID = $request->UID;
+$UID = mysqli_real_escape_string($conn, $request->UID);
 
 $sql = "SELECT UID FROM externalusers";
 $result = $conn->query($sql);

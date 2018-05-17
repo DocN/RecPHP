@@ -24,11 +24,11 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
-$email = $request->email;
-$userid = $request->userid;
-$firstname = $request->firstname;
-$lastname = $request->lastname;
-$balance = $request->balance;
+$email = mysqli_real_escape_string($conn, $request->email);
+$userid = mysqli_real_escape_string($conn, $request->userid);
+$firstname = mysqli_real_escape_string($conn, $request->firstname);
+$lastname = mysqli_real_escape_string($conn, $request->lastname);
+$balance = mysqli_real_escape_string($conn, $request->balance);
 $sqlSelect = "UPDATE externalusers SET email='{$email}', firstname='{$firstname}', lastname='{$lastname}', balance='{$balance}' WHERE email='{$email}' AND UID='{$userid}'";
 $result = $conn->query($sqlSelect);
 if ($result->num_rows > 0) {

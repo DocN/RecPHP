@@ -24,11 +24,11 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
-$user = $request->username;
-$userid = $request->UID;
-$authLevel = $request->authLevel;
-$firstname = $request->firstname;
-$lastname = $request->lastname;
+$user = mysqli_real_escape_string($conn, $request->username);
+$userid = mysqli_real_escape_string($conn, $request->UID);
+$authLevel = mysqli_real_escape_string($conn, $request->authLevel);
+$firstname = mysqli_real_escape_string($conn, $request->firstname);
+$lastname = mysqli_real_escape_string($conn, $request->lastname);
 
 $sqlSelect = "UPDATE adminusers SET authLevel='{$authLevel}', firstname='{$firstname}', lastname='{$lastname}'  WHERE username='{$user}' AND UID='{$userid}'";
 $result = $conn->query($sqlSelect);

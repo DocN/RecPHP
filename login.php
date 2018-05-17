@@ -19,8 +19,8 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
-$username = $request->username;
-$epassword = $request->epassword;
+$username = mysqli_real_escape_string($conn, $request->username);
+$epassword = mysqli_real_escape_string($conn, $request->epassword);
 $sql = "SELECT * FROM adminusers WHERE epassword='{$epassword}' AND username='{$username}'";
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {

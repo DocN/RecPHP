@@ -24,10 +24,10 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
-$instructorID = $request->instructorID;
-$firstname = $request->firstname;
-$lastname = $request->lastname;
-$photourl = $request->photourl;
+$instructorID = mysqli_real_escape_string($conn, $request->instructorID);
+$firstname = mysqli_real_escape_string($conn, $request->firstname);
+$lastname = mysqli_real_escape_string($conn, $request->lastname);
+$photourl = mysqli_real_escape_string($conn, $request->photourl);
 
 $sqlSelect = "UPDATE instructors SET firstname='{$firstname}', lastname='{$lastname}', photoURL='{$photourl}' WHERE instructorID='{$instructorID}'";
 $result = $conn->query($sqlSelect);

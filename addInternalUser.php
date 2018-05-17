@@ -24,12 +24,12 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
-$username = $request->username;
-$epassword = $request->epassword;
-$authLevel = $request->authlevel;
-$firstname = $request->firstname;
-$lastname = $request->lastname;
-$active = $request->active;
+$username = mysqli_real_escape_string($conn, $request->username);
+$epassword = mysqli_real_escape_string($conn, $request->epassword);
+$authLevel = mysqli_real_escape_string($conn, $request->authlevel);
+$firstname = mysqli_real_escape_string($conn, $request->firstname);
+$lastname = mysqli_real_escape_string($conn, $request->lastname);
+$active = mysqli_real_escape_string($conn, $request->active);
 $logintime = time();
 
 $sqlSelect = "SELECT * FROM adminusers WHERE username='{$username}'";

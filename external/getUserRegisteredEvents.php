@@ -20,7 +20,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 
-$UID = $request->UID;
+$UID = mysqli_real_escape_string($conn, $request->UID);
 
 $sql = "SELECT * FROM registeredevents LEFT OUTER JOIN events ON registeredevents.eventID = events.eventID LEFT OUTER JOIN classes ON events.classID = classes.classID WHERE UID='{$UID}'";
 $result = $conn->query($sql);

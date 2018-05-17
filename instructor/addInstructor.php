@@ -24,10 +24,10 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
-$firstname = $request->firstname;
-$lastname = $request->lastname;
-$photoURL = $request->photoURL;
-$bio = $request->bio;
+$firstname = mysqli_real_escape_string($conn, $request->firstname);
+$lastname = mysqli_real_escape_string($conn, $request->lastname);
+$photoURL = mysqli_real_escape_string($conn, $request->photoURL);
+$bio = mysqli_real_escape_string($conn, $request->bio);
 
 $creationTime = time();
 
