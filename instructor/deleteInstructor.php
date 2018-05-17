@@ -24,7 +24,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
-$userid = $request->instructorID;
+$userid = mysqli_real_escape_string($conn, $request->instructorID);
 
 
 //$creationTime = time();
