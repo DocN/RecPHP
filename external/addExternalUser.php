@@ -24,12 +24,12 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
-$email = $request->email;
-$epin = $request->ePin;
-$firstname = $request->firstname;
-$lastname = $request->lastname;
-$active = $request->active;
-$balance =$request->balance;
+$email = mysqli_real_escape_string($conn, $request->email);
+$epin = mysqli_real_escape_string($conn, $request->ePin);
+$firstname = mysqli_real_escape_string($conn, $request->firstname);
+$lastname = mysqli_real_escape_string($conn, $request->lastname);
+$active = mysqli_real_escape_string($conn, $request->active);
+$balance = mysqli_real_escape_string($conn, $request->balance);
 $creationTime = time();
 
 $sqlSelect = "SELECT * FROM externalusers WHERE email='{$email}'";

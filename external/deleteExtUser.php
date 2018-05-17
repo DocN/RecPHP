@@ -24,8 +24,8 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
-$email = $request->email;
-$userid = $request->userid;
+$email = mysqli_real_escape_string($conn, $request->email);
+$userid = mysqli_real_escape_string($conn, $request->userid);
 
 
 //$creationTime = time();
