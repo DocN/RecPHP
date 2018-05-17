@@ -24,7 +24,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
-$user = $request->user;
+$user = mysqli_real_escape_string($conn, $request->user);
 
 $sqlSelect = "SELECT * FROM adminusers WHERE username='{$user}'";
 $result = $conn->query($sqlSelect);

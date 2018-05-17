@@ -24,9 +24,9 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
-$user = $request->user;
-$userid = $request->userid;
-$newepassword = $request->newepassword;
+$user = mysqli_real_escape_string($conn, $request->user);
+$userid = mysqli_real_escape_string($conn, $request->userid);
+$newepassword = mysqli_real_escape_string($conn, $request->newepassword);
 
 $sqlSelect = "UPDATE adminusers SET epassword='{$newepassword}' WHERE username='{$user}' AND UID='{$userid}'";
 $result = $conn->query($sqlSelect);
