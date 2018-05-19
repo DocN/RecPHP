@@ -19,22 +19,23 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
-$strtotime = date("o-\WW");
-$start = strtotime($strtotime);
-$end = strtotime("+6 days 23:59:59", $start);
 
-$sql = "SELECT * FROM events LEFT JOIN classes ON events.classID = classes.classID WHERE eventDay BETWEEN {$start} AND {$end} ORDER BY eventDay";
+$sql = "SELECT * FROM reviews LEFT OUTER JOIN instructors ON reviews.instructorID = instructors.instructorID LEFT OUTER JOIN classes ON reviews.classID = classes.classID limit 10";
 $result = $conn->query($sql);
 $count = 0;
-
 if ($result->num_rows > 0) {
     // output data of each row
     while($row = $result->fetch_assoc()) {
-        $data[$count]['eventID'] = $row["eventID"];
-        $data[$count]['classID'] =$row["classID"];
-        $data[$count]['eventDay']= $row['eventDay'];
-        $data[$count]['className'] = $row["className"];
-        $data[$count]['classLocation'] =$row["classLocation"];
+        $data[$count]['reviewID'] = $row["reviewID"];
+        $data[$count]['instructorID'] =$row["instructorID"];
+        $data[$count]['classID']= $row['classID'];
+        $data[$count]['reviewText'] = $row['reviewText'];
+        $data[$count]['timeStamp'] = $row['timeStamp'];
+        $data[$count]['firstname'] = $row["firstname"];
+        $data[$count]['lastname'] =$row["lastname"];
+        $data[$count]['starRating'] = $row['starRating'];
+        $data[$count]['className'] = $row['className'];
+
         $count = $count +1;
     }
 } else {
