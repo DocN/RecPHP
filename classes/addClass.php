@@ -94,13 +94,23 @@ function parse_weeks($start_date, $end_date, $weekday) {
 	$start_date += abs($weekday - $wd) * 86400;
 	while ($start_date < $end_date) {
 		$uid = gen_uuid();
+		
+
 		$sql = "INSERT INTO events (eventID, classID, eventDay, usedSlots, maxSlots, active)
 		VALUES ('{$uid}', '{$GLOBALS['classID']}', '{$start_date}', '0', '{$GLOBALS['openSlots']}', '1')";
-		if($GLOBALS['conn']->query($sql)) {
 
+		//remind them a day before
+		$reminderDate = $start_date - 86400;
+		$unixToDate = date('Y-m-d',($start_date-25200));
+		$reminderSubject = "Friendly Reminder From the BCIT Rec Center! You have a {$GLOBALS['className']} class on {$unixToDate}";
+		$reminderMessage = "<p>Hello this is an automated message from the BCIT Recreation Center reminding you that you have a {$GLOBALS['className']} class on {$unixToDate} at {$GLOBALS['beginHour']}:{$GLOBALS['beginMin']}. We look forward to seeing you there!</p>\n";
+		$sqlReminder = "INSERT INTO mailqueue (eventID, timestamp, subject, message, active)
+		VALUES ('{$uid}', {$reminderDate}, '{$reminderSubject}','{$reminderMessage}', 1)";
+		if($GLOBALS['conn']->query($sql)) {
 		}
 		else {
 		}
+		$GLOBALS['conn']->query($sqlReminder);
 	    //echo gmdate("Y-m-d\TH:i:s\Z", $start_date).date("l", $start_date).  "<br>";
 	    $start_date +=  604800;
 	}
