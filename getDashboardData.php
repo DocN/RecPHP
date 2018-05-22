@@ -20,8 +20,11 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 
+//
 $UID = mysqli_real_escape_string($conn, $request->UID);
 
+
+//Fetch all external users 
 $sql = "SELECT UID FROM externalusers";
 $result = $conn->query($sql);
 $count = 0;
@@ -33,8 +36,12 @@ if ($result->num_rows > 0) {
 } else {
     //echo "0 results";
 }
+
+//Count of all external users
 $data['numberOfExtUsers'] = $count;
 
+
+//Select all the events from the database.
 $sql = "SELECT eventID FROM events";
 $result = $conn->query($sql);
 $count = 0;
@@ -48,6 +55,7 @@ if ($result->num_rows > 0) {
 }
 $data['numberOfEvents'] = $count;
 
+//Select reviews from the sql database
 $sql = "SELECT reviewID FROM reviews";
 $result = $conn->query($sql);
 $count = 0;
@@ -59,6 +67,8 @@ if ($result->num_rows > 0) {
 } else {
     //echo "0 results";
 }
+
+//Return the number of reviews for the database.
 $data['numberOfReviews'] = $count;
 
 $sql = "SELECT instructorID FROM instructors";
@@ -72,6 +82,8 @@ if ($result->num_rows > 0) {
 } else {
     //echo "0 results";
 }
+
+//Return the number of instructors.
 $data['numberOfInstructors'] = $count;
 
 

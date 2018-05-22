@@ -7,6 +7,8 @@ $postdata = file_get_contents("php://input");
 
 //echo $request->encryptionKey;
 //$res_ar = array("foo"=> $_REQUEST['body']);
+
+//Database login information.
 $tester = 0;
 $response = '';
 $servername = "drnserver.duckdns.org";
@@ -20,6 +22,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 
+//SQL statement to retrieve all new users.
 $sql = "SELECT UID, email, firstName, lastName, creationTime FROM externalusers ORDER BY creationTime DESC LIMIT 10;";
 $result = $conn->query($sql);
 $count = 0;

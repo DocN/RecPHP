@@ -24,14 +24,22 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
+
+
+//SQL Variables to request for an SQL statement.
+
 $username = mysqli_real_escape_string($conn, $request->username);
 $epassword = mysqli_real_escape_string($conn, $request->epassword);
 $authLevel = mysqli_real_escape_string($conn, $request->authlevel);
 $firstname = mysqli_real_escape_string($conn, $request->firstname);
 $lastname = mysqli_real_escape_string($conn, $request->lastname);
 $active = mysqli_real_escape_string($conn, $request->active);
+
+//Track login time 
 $logintime = time();
 
+
+//SQL Statement to retrieve internal users and determine whether an account exists under the same username
 $sqlSelect = "SELECT * FROM adminusers WHERE username='{$username}'";
 $result = $conn->query($sqlSelect);
 if ($result->num_rows > 0) {
@@ -43,7 +51,13 @@ if ($result->num_rows > 0) {
 
 }
 
+
+//Generate a unique user id for users.
 $uid = gen_uuid();
+
+/**
+SQL Statement to add an admin user to the database.
+**/
 $sql = "INSERT INTO adminusers (UID, username, epassword, authLevel, firstname, lastname, active, logintime)
 VALUES ('{$uid}','{$username}', '{$epassword}', '{$authLevel}', '{$firstname}', '{$lastname}', '{$active}', '{$logintime}')";
 if ($conn->query($sql) === TRUE) {
@@ -53,9 +67,12 @@ if ($conn->query($sql) === TRUE) {
 }
 
 $conn->close();
+
 echo json_encode($data);
 
-
+/**
+Function generates a 64bit unique ID.
+**/
 function gen_uuid() {
     return sprintf( '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
         // 32 bits for "time_low"
