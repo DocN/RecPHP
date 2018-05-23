@@ -29,6 +29,9 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 
+$events = array();
+$users = array();
+
 //credit users
 $sql = "SELECT * FROM registeredevents LEFT JOIN events ON registeredevents.eventID = events.eventID LEFT JOIN externalusers ON registeredevents.UID = externalusers.UID WHERE classID='{$classID}'";
 $result = $conn->query($sql);
@@ -38,9 +41,38 @@ if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
 	    $currentUID = $row["UID"];
 	    $currentBalance = $row["balance"] +1;
-	    $sqlUpdate = "UPDATE externalusers SET balance='{$currentBalance}' WHERE UID='{$currentUID}";
+	    $sqlUpdate = "UPDATE externalusers SET balance = balance + 1 WHERE UID='{$currentUID}'";
 	    $conn->query($sqlUpdate);
+	    array_push($events, $row["eventID"]);
+	    array_push($users, $row["UID"]);
     }
 } else {
-    echo "0 results";
+
 }
+
+//delete registeredevents
+for ($i = 0; $i < count($events); $i++) {
+  $deleteStatement = "DELETE FROM registeredevents WHERE UID='{$users[$i]}' AND eventID='{$events[$i]}'";
+  $conn->query($deleteStatement);
+}
+
+//delete events
+for ($i = 0; $i < count($events); $i++) {
+  $deleteStatement = "DELETE FROM events WHERE classID='{$classID}'";
+  $conn->query($deleteStatement);
+}
+
+//delete class 
+$deleteStatement = "DELETE FROM classes WHERE classID='{$classID}'";
+$conn->query($deleteStatement);
+
+$conn->close();
+
+$data['message'] = "Successfully deleted class and credited all users";
+$data['valid'] = 1;
+
+echo json_encode($data);
+
+?>
+
+
