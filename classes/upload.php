@@ -2,6 +2,7 @@
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Origin, Content-Type, Authorization');
+include "../dbCredentials.php";
 makedir("u");
 $dir = "u/" . uniqid();
 makeDir($dir);
@@ -10,7 +11,7 @@ $target_file = $target_dir . basename($_FILES["file"]["name"]);
 $uploadOk = 1;
 $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 $message['message'] = '';
-$domain = "http://127.0.0.1/bcitrec/classes/" . $dir . '/' . $_FILES["file"]["name"];
+$domain = $displayURL . "bcitrec/classes/" . $dir . '/' . $_FILES["file"]["name"];
 $message['url'] = $domain;
 $message['result'] = false;
 

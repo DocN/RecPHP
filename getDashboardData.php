@@ -9,10 +9,8 @@ $request = json_decode($postdata);
 //$res_ar = array("foo"=> $_REQUEST['body']);
 $tester = 0;
 $response = '';
-$servername = "drnserver.duckdns.org";
-$username = "DrN";
-$password = "password123!";
-$dbname = "recdatabase";
+include "dbCredentials.php";
+
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 // Check connection

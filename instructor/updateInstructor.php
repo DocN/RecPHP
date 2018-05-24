@@ -14,10 +14,7 @@ if(!isset($request->instructorID)) {
 //$res_ar = array("foo"=> $_REQUEST['body']);
 $tester = 0;
 $response = '';
-$servername = "drnserver.duckdns.org";
-$username = "DrN";
-$password = "password123!";
-$dbname = "recdatabase";
+include "../dbCredentials.php";
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 // Check connection
@@ -28,8 +25,8 @@ $instructorID = mysqli_real_escape_string($conn, $request->instructorID);
 $firstname = mysqli_real_escape_string($conn, $request->firstname);
 $lastname = mysqli_real_escape_string($conn, $request->lastname);
 $photourl = mysqli_real_escape_string($conn, $request->photourl);
-
-$sqlSelect = "UPDATE instructors SET firstname='{$firstname}', lastname='{$lastname}', photoURL='{$photourl}' WHERE instructorID='{$instructorID}'";
+$bio = mysqli_real_escape_string($conn, $request->bio);
+$sqlSelect = "UPDATE instructors SET firstname='{$firstname}', lastname='{$lastname}', photoURL='{$photourl}', bio='{$bio}' WHERE instructorID='{$instructorID}'";
 $result = $conn->query($sqlSelect);
 if ($result->num_rows > 0) {
     $data['message'] = "*Username already exists";
